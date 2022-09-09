@@ -1,0 +1,45 @@
+.footer {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+}
+
+.row, .footer, nav {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.btn-group .btn {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.btn-group {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+.row .pad-right-40, .pad-right-40{
+    padding-right: 40%;
+}
+
+a:link, a:visited {
+    color: black;
+}
+
+.card {
+    margin-bottom: 30px;
+}
+
+#back-to-top {
+    margin-bottom: 100px;
+}
+
+#export-csv {
+    text-align: right;
+}

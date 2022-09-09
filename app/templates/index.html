@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row jumbotron">
+    <h1 class="display-4">Barley's HorseReality Tools</h1>
+    
+    <div class="col">
+        <h5>Get my Horse Data Table:</h5>
+        <form action="/horse-table" method="POST">
+            <input type="text" name="user_id" placeholder="User ID" required />
+            <input class="btn btn-primary" type="submit" value="Submit" />
+        </form>
+        <hr>
+        <div class="pad-right-40">
+            <p>
+                Warning: this application is limited in how many requests it can send to HorseReality Servers at a time.
+                If you have lots of horses, this can take several minutes! (Estimated: 10 minutes for 300 horses).
+                I plan to implement a feature that caches your data as you browse the site in the future!
+                Additionally, you can download your data as a CSV file, which is able to be imported into most spreadsheet programs.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

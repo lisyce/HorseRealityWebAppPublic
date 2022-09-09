@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="static/horse_table_toggle.js"></script>
+<script type="text/javascript" charset="utf8" src="static/csv_export.js"></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+
+<h2 id="top">User #{{ id }}'s Horses</h2>
+
+<div id="export-csv">
+    <button class="btn btn-primary" onclick="exportTableToCSV('#{{ id }}Horses.csv');">Export Table to CSV</button>
+    <p>(You can import this format into most spreadsheet programs)</p>
+</div>
+
+<hr>
+
+<div class="btn-group">
+  <input id="btn_show_gp" class="btn btn-light" type="button" value="Show Detailed GP">
+  <input id="btn_show_discipline_gp" class="btn btn-light" type="button" value="Show Discipline GP">
+  <input id="btn_show_confo" class="btn btn-light" type="button" value="Show Confo">
+  <input id="btn_show_confo_totals" class="btn btn-light" type="button" value="Show Confo Totals">  
+</div>
+
+<table id="horse_data_table" class="display table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>#</th>
+      <th>Breed</th>
+      <th>Sex</th>
+      <th>Foal?</th>
+      <th>Total GP</th>
+
+      {% for gp_stat in horses[0].gp_stats %}
+        <th class="detailed_gp">
+          {{ gp_stat.strip().replace('_', ' ').title() }}
+        </th>
+      {% endfor %}
+      
+      {% for discipline in horses[0].discipline_gp %}
+        <th class="discipline_gp">
+          {{ discipline.replace('_', ' ').title() + " GP" }}
+        </th>
+      {% endfor %}
+
+      {% for confo_total in horses[0].confo_totals %}
+        <th class="confo_total">
+          {{ "Confo " + confo_total.replace('_', ' ').title() }}
+        </th>
+      {% endfor %}
+
+      {% for confo_stat in horses[0].confo_stats %}
+        <th class="confo">
+          {{ confo_stat.replace('_', ' ').title() }}
+        </th>
+      {% endfor %}
+
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for horse in horses %}
+    <tr>
+      <td><a href="https://www.horsereality.com/horses/{{ horse.lifenumber }}/{{ horse.name }}" target="_blank">{{ horse.name }}</a></td>
+      
+      <td>#{{ horse.lifenumber }}</td>
+      <td>{{ horse.breed.replace('_', ' ').title() }}</td>
+      <td>{{ horse.sex.title() }}</td>
+
+      <td>
+        {% if horse.to_dict()['foal'] == True %}
+          Yes
+        {% else %}
+          No
+        {% endif %}
+      </td>
+
+      <td>{{ horse.total_gp }}</td>
+
+      {% for gp_stat in horse.gp_stats %}
+        <td class="detailed_gp">{{ horse.gp_stats[gp_stat] }}</td>
+      {% endfor %}
+
+      {% for discipline in horse.discipline_gp %}
+        <td class="discipline_gp">{{ horse.discipline_gp[discipline] }}</td>
+      {% endfor %}
+
+      {% for confo_total in horse.confo_totals %}
+        <td class="confo_total">{{ horse.confo_totals[confo_total] }}</td>
+      {% endfor %}
+
+      {% for confo_stat in horse.confo_stats %}
+        <td class="confo">{{ horse.confo_stats[confo_stat].replace('_', ' ').title() }}</td>
+      {% endfor %}
+
+    </tr>
+    {% endfor %}
+
+  </tbody>
+
+</table>
+
+<a id="back-to-top" href="#top">Back to Top</a>
+</div>
+
+    
+{% endblock %}
