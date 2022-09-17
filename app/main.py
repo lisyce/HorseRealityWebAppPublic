@@ -2,9 +2,7 @@ import json
 import horsereality
 from quart import Quart, render_template, request
 
-from scraping.detailed_horse import DetailedHorse
 from scraping.main import get_user_horses
-from scraping.utils import relogin
 
 app = Quart(__name__)
 
@@ -43,9 +41,6 @@ async def startup():
     global hr 
     hr = horsereality.Client(remember_cookie_name=config['authentication']['remember-cookie-name'], 
     remember_cookie_value=config['authentication']['remember-cookie-value'], auto_rollover=True)
-    
-    email = config['authentication']['email']
-    password = config['authentication']['password']
 
     await hr.verify()
 
