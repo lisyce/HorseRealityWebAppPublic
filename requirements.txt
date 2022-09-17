@@ -1,7 +1,7 @@
 aiohttp
 beautifulsoup4
 Flask
-git+https://github.com/hr-tools/horsereality>=1.1.0
+git+https://github.com/hr-tools/horsereality@master
 hypercorn
 quart
 requests
