@@ -1,4 +1,6 @@
 import json
+import os
+from dotenv import load_dotenv
 import horsereality
 from quart import Quart, render_template, request
 
@@ -37,10 +39,11 @@ async def user_horses():
 
 @app.before_serving
 async def startup():
-    config = json.load(open('config.json'))
+    load_dotenv()
+    
     global hr 
-    hr = horsereality.Client(remember_cookie_name=config['authentication']['remember-cookie-name'], 
-    remember_cookie_value=config['authentication']['remember-cookie-value'], auto_rollover=True)
+    hr = horsereality.Client(remember_cookie_name=os.environ['HR_REMEMBER_COOKIE_NAME'], 
+    remember_cookie_value=os.environ['HR_REMEMBER_COOKIE_VALUE'], auto_rollover=True)
 
     await hr.verify()
 
