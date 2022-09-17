@@ -24,6 +24,14 @@ async def get_user_horses(client, user_id):
                 horses.append(detailed_horse)
     return horses
 
+async def get_username_from_id(client, user_id):
+    profile_link =  f'/user/{str(user_id)}'
+    profile_html = await get_hr_html(client, profile_link, True)
+    soup = BeautifulSoup(profile_html, 'html.parser')
+    
+    tag = soup.find(name='a', href=f'https://v2.horsereality.com{profile_link}')
+    return tag.get_text()[1:-1]
+
 async def get_hr_html(client, url, isV2):
-    data = await client.http.request(method='GET', path=url, v2=isV2, headers={'User-Agent': 'Barley\'HorseRealityTools/1.0 (Language=Python/3.10.0)'})
+    data = await client.http.request(method='GET', path=url, v2=isV2, headers={'User-Agent': 'Barley\'HorseRealityTools/1.0 (Language=Python/3.10.7)'})
     return data['data']
