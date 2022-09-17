@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import horsereality
 from quart import Quart, render_template, request
 
-import scraping
+from scraping.utils import get_user_horses
 
 app = Quart(__name__)
 
@@ -33,7 +33,7 @@ async def user_horses():
         form = await request.form      
         id = int(form['user_id'])
 
-        horses = await scraping.get_user_horses(hr, id)
+        horses = await get_user_horses(hr, id)
         return await render_template('horse_table.html', horses=horses, id=id)
 
 @app.before_serving
