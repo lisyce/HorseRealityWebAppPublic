@@ -1,10 +1,9 @@
-import json
 import os
 from dotenv import load_dotenv
 import horsereality
 from quart import Quart, render_template, request
 
-from scraping.main import get_user_horses
+from scraping import get_user_horses
 
 app = Quart(__name__)
 
@@ -40,7 +39,7 @@ async def user_horses():
 @app.before_serving
 async def startup():
     load_dotenv()
-    
+
     global hr 
     hr = horsereality.Client(remember_cookie_name=os.environ['HR_REMEMBER_COOKIE_NAME'], 
     remember_cookie_value=os.environ['HR_REMEMBER_COOKIE_VALUE'], auto_rollover=True)
