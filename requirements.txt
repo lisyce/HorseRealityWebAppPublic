@@ -5,3 +5,4 @@ git+https://github.com/hr-tools/horsereality@master
 hypercorn
 quart
 requests
+python-dotenv
