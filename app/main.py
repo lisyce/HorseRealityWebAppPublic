@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import horsereality
 from quart import Quart, render_template, request
 
-from scraping.utils import get_user_horses
+from .scraping.utils import get_user_horses
 
 app = Quart(__name__)
 
