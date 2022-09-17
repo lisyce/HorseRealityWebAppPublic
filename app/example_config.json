@@ -1,7 +1,5 @@
 {
     "authentication": {
-        "email": "john.doe@example.com",
-        "password": "insecurepassword123",
         "remember-cookie-name": "remember_web_qwertyqwerty",
         "remember-cookie-value": "qwertyqwertyqwertyqwertyqwertyqwertyqwertyqwerty"
     }
