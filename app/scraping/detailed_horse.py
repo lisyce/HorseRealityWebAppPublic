@@ -30,7 +30,7 @@ class DetailedHorse(Horse):
 
         self.confo_totals: Dict[str, int] = data.get('confo_totals') # number of "very good", etc
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self, *remove_keys) -> Dict[str, Any]:
         base_data = super().to_dict()
        
         detailed_data = {
@@ -40,7 +40,12 @@ class DetailedHorse(Horse):
             'confo_stats': self.confo_stats,
             'confo_totals': self.confo_totals,
         }
-        return base_data | detailed_data # merge operator        
+        all_data = base_data | detailed_data # merge operator  
+        for key in remove_keys:
+            if key in all_data:
+                all_data.pop(key)
+
+        return all_data      
 
     @classmethod
     async def _from_page(cls, client, http, html_text):
@@ -108,7 +113,7 @@ class DetailedHorse(Horse):
                 'hid': str(lifenumber),
                 'newtab': f'tab_{tab}2'
             },
-            headers={'User-Agent': 'Barley\'HorseRealityTools/1.0 (Language=Python/3.10.0)'},
+            headers={'User-Agent': 'Barley\'HorseRealityTools/1.0 (Language=Python/3.10.7)'},
             allow_redirects=False
         )
 

@@ -1,7 +1,7 @@
-from cgitb import html
 from bs4 import BeautifulSoup
 
 from horsereality.utils import get_lifenumber_from_url
+
 from .detailed_horse import DetailedHorse
 
 async def get_user_horses(client, user_id):
@@ -21,7 +21,7 @@ async def get_user_horses(client, user_id):
                 lifenumber = get_lifenumber_from_url(href)
                 html_text = await client.http.get_horse(lifenumber)
                 detailed_horse = await DetailedHorse._from_page(client=client, http=client.http, html_text=html_text)
-                horses.append(detailed_horse)
+                horses.append(detailed_horse.to_dict('layers'))
     return horses
 
 async def get_username_from_id(client, user_id):

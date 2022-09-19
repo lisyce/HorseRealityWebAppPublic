@@ -39,25 +39,25 @@
       <th>Foal?</th>
       <th>Total GP</th>
 
-      {% for gp_stat in horses[0].gp_stats %}
+      {% for gp_stat in horses[0]['gp_stats'] %}
         <th class="detailed_gp">
           {{ gp_stat.strip().replace('_', ' ').title() }}
         </th>
       {% endfor %}
       
-      {% for discipline in horses[0].discipline_gp %}
+      {% for discipline in horses[0]['discipline_gp'] %}
         <th class="discipline_gp">
           {{ discipline.replace('_', ' ').title() + " GP" }}
         </th>
       {% endfor %}
 
-      {% for confo_total in horses[0].confo_totals %}
+      {% for confo_total in horses[0]['confo_totals'] %}
         <th class="confo_total">
           {{ "Confo " + confo_total.replace('_', ' ').title() }}
         </th>
       {% endfor %}
 
-      {% for confo_stat in horses[0].confo_stats %}
+      {% for confo_stat in horses[0]['confo_stats'] %}
         <th class="confo">
           {{ confo_stat.replace('_', ' ').title() }}
         </th>
@@ -69,36 +69,36 @@
   <tbody>
     {% for horse in horses %}
     <tr>
-      <td><a href="https://www.horsereality.com/horses/{{ horse.lifenumber }}/{{ horse.name }}" target="_blank">{{ horse.name }}</a></td>
+      <td><a href="https://www.horsereality.com/horses/{{ horse.lifenumber }}/{{ horse.name }}" target="_blank">{{ horse['name'] }}</a></td>
       
-      <td>#{{ horse.lifenumber }}</td>
-      <td>{{ horse.breed.replace('_', ' ').title() }}</td>
-      <td>{{ horse.sex.title() }}</td>
+      <td>#{{ horse['lifenumber'] }}</td>
+      <td>{{ horse['breed'].replace('_', ' ').title() }}</td>
+      <td>{{ horse['sex'].title() }}</td>
 
       <td>
-        {% if horse.to_dict()['foal'] == True %}
+        {% if horse['foal'] == True %}
           Yes
         {% else %}
           No
         {% endif %}
       </td>
 
-      <td>{{ horse.total_gp }}</td>
+      <td>{{ horse['total_gp'] }}</td>
 
-      {% for gp_stat in horse.gp_stats %}
-        <td class="detailed_gp">{{ horse.gp_stats[gp_stat] }}</td>
+      {% for gp_stat in horse['gp_stats'] %}
+        <td class="detailed_gp">{{ horse['gp_stats'][gp_stat] }}</td>
       {% endfor %}
 
-      {% for discipline in horse.discipline_gp %}
-        <td class="discipline_gp">{{ horse.discipline_gp[discipline] }}</td>
+      {% for discipline in horse['discipline_gp'] %}
+        <td class="discipline_gp">{{ horse['discipline_gp'][discipline] }}</td>
       {% endfor %}
 
-      {% for confo_total in horse.confo_totals %}
-        <td class="confo_total">{{ horse.confo_totals[confo_total] }}</td>
+      {% for confo_total in horse['confo_totals'] %}
+        <td class="confo_total">{{ horse['confo_totals'][confo_total] }}</td>
       {% endfor %}
 
-      {% for confo_stat in horse.confo_stats %}
-        <td class="confo">{{ horse.confo_stats[confo_stat].replace('_', ' ').title() }}</td>
+      {% for confo_stat in horse['confo_stats'] %}
+        <td class="confo">{{ horse['confo_stats'][confo_stat].replace('_', ' ').title() }}</td>
       {% endfor %}
 
     </tr>

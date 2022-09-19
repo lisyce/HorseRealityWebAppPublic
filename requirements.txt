@@ -6,3 +6,4 @@ hypercorn
 quart
 requests
 python-dotenv
+aiocache
