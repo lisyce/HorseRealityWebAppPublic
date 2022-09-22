@@ -3,15 +3,36 @@
 {% block head %}
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf8" src="static/horse_table_toggle.js"></script>
 <script type="text/javascript" charset="utf8" src="static/csv_export.js"></script>
 
+<script>
+
+  $("#loading").show();
+  $("full-table").hide();
+
+  function requestData(userID) {
+      $.get("/api/horse-table/"+userID, function(data){
+          return data;
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+          console.log("error " + textStatus);
+          console.log("incoming Text " + jqXHR.responseText);
+      });
+  }
+
+  requestData({{ user_id }});
+</script>
+
 {% endblock %}
 
 {% block content %}
-<div class="row">
+
+<h1 id="loading">Loading Horses for Player #{{ user_id }}...</h1>
+
+<div class="row" id="full-table">
 
 <h2 id="top">{{ username }}'s Horses</h2>
 

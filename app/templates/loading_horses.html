@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<h1>Loading...</h1>
+<h1 id="loading">Loading Horses for Player #{{ user_id }}...</h1>
 
+<script>
+
+    function requestData(userID) {
+        $.get("http://127.0.0.1:8000/api/horse-table/"+userID, function(data){
+            return data;
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("error " + textStatus);
+            console.log("incoming Text " + jqXHR.responseText);
+        });
+    }
+
+    requestData({{ user_id }})
+</script>
 {% endblock %}
