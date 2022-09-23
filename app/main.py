@@ -6,7 +6,7 @@ import horsereality
 from quart import Quart, render_template, request, redirect, make_response, url_for
 from aiocache import Cache
 
-from app.scraping.utils import get_user_horses, get_username_from_id
+from app.scraping.utils import get_user_horses_json, get_username_from_id
 from app.server_sent_event import ServerSentEvent
 
 app = Quart(__name__)
@@ -16,7 +16,7 @@ app.config['CACHE_DIR'] = 'app/cache'
 cache = Cache()
 
 async def cache_user_horses(client, user_id):
-    horses = await get_user_horses(client, user_id)
+    horses = await get_user_horses_json(client, user_id)
     await cache.set(f'horse_list{str(user_id)}', horses)
     return horses
 
@@ -27,7 +27,6 @@ async def index():
     elif request.method == 'POST':
         form = await request.form
         id = form['user_id']
-        # return redirect(url_for('horse_table_api', id_=id))
         return redirect(url_for('horse_table_display', id_=id))
     
 
@@ -45,7 +44,7 @@ async def about():
 
 @app.get('/horse-table/<int:id_>')
 async def horse_table_display(id_):
-    return await render_template('horse_table.html', )
+    return await render_template('horse_table.html', user_id=id_)
 
 @app.get('/api/horse-table/<int:id_>')
 async def horse_table_api(id_):
@@ -58,7 +57,7 @@ async def horse_table_api(id_):
     response = await make_response(
         send_events(),
         {
-            'Content-Type': 'text/event-stream',
+            'Content-Type': 'application/json',
             'Cache-Control': 'no-cache',
             'Transfer-Encoding': 'chunked',
         },
@@ -69,6 +68,11 @@ async def horse_table_api(id_):
     response.set_cookie('bzp-hr-username', username)
 
     return response
+
+@app.get('/api/username_from_id/<int:id_>')
+async def username_from_id_api(id_):
+    username = await get_username_from_id(hr, id_)
+    return username
 
 
 @app.before_serving

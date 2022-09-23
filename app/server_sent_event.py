@@ -1,4 +1,4 @@
-# from quart docs
+# modified from quart docs
 
 from dataclasses import dataclass
 
@@ -11,7 +11,7 @@ class ServerSentEvent:
 
 
     def encode(self) -> bytes:
-        message = f"data: {self.data}"
+        message = self.data
         if self.event is not None:
             message = f"{message}\nevent: {self.event}"
         if self.id is not None:
