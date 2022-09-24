@@ -15,6 +15,7 @@ app.config['CACHE_TYPE'] = 'FileSystemCache'
 app.config['CACHE_DIR'] = 'app/cache'
 cache = Cache()
 
+# TODO actually use the cache if the data already exists to save time
 async def cache_user_horses(client, user_id):
     horses = await get_user_horses_json(client, user_id)
     await cache.set(f'horse_list{str(user_id)}', horses)
@@ -44,7 +45,9 @@ async def about():
 
 @app.get('/horse-table/<int:id_>')
 async def horse_table_display(id_):
-    return await render_template('horse_table.html', user_id=id_)
+    global hr
+    username = await get_username_from_id(hr, id_)
+    return await render_template('horse_table.html', user_id=id_, username=username)
 
 @app.get('/api/horse-table/<int:id_>')
 async def horse_table_api(id_):
@@ -62,18 +65,9 @@ async def horse_table_api(id_):
             'Transfer-Encoding': 'chunked',
         },
     )
-    username = await get_username_from_id(hr, id_)
     response.timeout = None
-    response.set_cookie('bzp-hr-id', str(id_))
-    response.set_cookie('bzp-hr-username', username)
 
     return response
-
-@app.get('/api/username_from_id/<int:id_>')
-async def username_from_id_api(id_):
-    username = await get_username_from_id(hr, id_)
-    return username
-
 
 @app.before_serving
 async def startup():

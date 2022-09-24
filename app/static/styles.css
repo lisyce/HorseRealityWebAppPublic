@@ -43,3 +43,7 @@ a:link, a:visited {
 #export-csv {
     text-align: right;
 }
+
+td:not(.default-caps), th:not(.default-caps) {
+    text-transform: capitalize;
+}

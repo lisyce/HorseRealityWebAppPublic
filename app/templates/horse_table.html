@@ -4,38 +4,16 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<script type="text/javascript" charset="utf8" src="../static/horse_table_toggle.js"></script>
 <script type="text/javascript" charset="utf8" src="../static/csv_export.js"></script>
+<script type="text/javascript" charset="utf8" src="../static/horse_table_populate.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
 <script>
 
-function populateTable(userID) {
-    $.getJSON("/api/horse-table/"+userID, (data) => {
-        $("#loading").hide();
-        $("#full-table").show();
-        console.log(data);
-
-        $.get("/api/username_from_id/"+userID, (data) => {
-          $("#username").text(data + "'s Horses")
-        })
-        
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        console.log("error " + textStatus);
-        console.log("incoming Text " + jqXHR.responseText);
-    });
-}
-
-function topRow() {
-    const topRow = $.get("#top_row");
-    
-}
-
 $(document).ready(() => {
-    $("#loading").show();
-    $("#full-table").hide();
-    populateTable({{ user_id }});
+  $("#loading").show();
+  $("#full-table").hide();
+  populateTable({{ user_id }}, "{{ username }}");
 });
 </script>
 
@@ -43,46 +21,46 @@ $(document).ready(() => {
 
 {% block content %}
 
-<h1 id="loading">Loading Horses for Player #{{ user_id }}...</h1>
+<div class="d-flex justify-content-center">
+  <h1 id="loading">Loading Horses for Player #{{ user_id }}...</h1>
+</div>
 
 <div class="row" id="full-table">
 
-<h2 id="username"></h2>
+  <h2 id="username"></h2>
 
-<div id="export-csv">
-    <button class="btn btn-primary" onclick="exportTableToCSV('#{{ id }}Horses.csv');">Export Table to CSV</button>
-    <p>(You can import this format into most spreadsheet programs)</p>
-</div>
+  <div id="export-csv">
+      <button class="btn btn-primary" onclick="exportTableToCSV('#{{ id }}Horses.csv');">Export Table to CSV</button>
+      <p>(You can import this format into most spreadsheet programs)</p>
+  </div>
 
-<hr>
+  <hr>
 
-<div class="btn-group">
-  <input id="btn_show_gp" class="btn btn-light" type="button" value="Show Detailed GP">
-  <input id="btn_show_discipline_gp" class="btn btn-light" type="button" value="Show Discipline GP">
-  <input id="btn_show_confo" class="btn btn-light" type="button" value="Show Confo">
-  <input id="btn_show_confo_totals" class="btn btn-light" type="button" value="Show Confo Totals">  
-</div>
+  <div class="btn-group">
+    <input id="btn-show-gp" class="btn btn-light" type="button" value="Show Detailed GP">
+    <input id="btn-show-discipline-gp" class="btn btn-light" type="button" value="Show Discipline GP">
+    <input id="btn-show-confo" class="btn btn-light" type="button" value="Show Confo">
+    <input id="btn-show-confo-totals" class="btn btn-light" type="button" value="Show Confo Totals">  
+  </div>
 
-<table id="horse_data_table" class="display table table-striped table-hover">
-  <thead>
-    <tr id="top_row">
-      <th>Name</th>
-      <th>#</th>
-      <th>Breed</th>
-      <th>Sex</th>
-      <th>Foal?</th>
-      <th>Total GP</th>
+  <table id="horse-data-table">
+    <thead>
+      <tr id="top-row">
+        <th>Name</th>
+        <th>#</th>
+        <th>Breed</th>
+        <th>Sex</th>
+        <th>Foal?</th>
+        <th>Total GP</th>
 
-    </tr>
-  </thead>
+      </tr>
+    </thead>
 
-  <tbody>
+    <tbody></tbody>
 
-  </tbody>
+  </table>
 
-</table>
-
-<a id="back-to-top" href="#top">Back to Top</a>
+  <a id="back-to-top" href="#top">Back to Top</a>
 </div>
 
     
