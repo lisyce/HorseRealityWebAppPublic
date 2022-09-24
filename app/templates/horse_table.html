@@ -11,6 +11,7 @@
 <script>
 
 $(document).ready(() => {
+  $(".text-danger").hide();
   $("#loading").show();
   $("#full-table").hide();
   populateTable({{ user_id }}, "{{ username }}");
@@ -22,7 +23,8 @@ $(document).ready(() => {
 {% block content %}
 
 <div class="d-flex justify-content-center">
-  <h1 id="loading">Loading Horses for Player #{{ user_id }}...</h1>
+  <h1 id="loading">Loading horses for player #{{ user_id }}...</h1>
+  <h2 class="text-danger">Error loading horses. please retry in a few minutes. <br> If the issue continues to persist, please submit an issue at the </h2>
 </div>
 
 <div class="row" id="full-table">

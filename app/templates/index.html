@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block head %}
+
+    <script>
+        if ("{{ error }}" != "no error") alert("{{ error }}");
+    </script>
+
+{% endblock %}
+
 {% block content %}
 
 <div class="row jumbotron">
@@ -24,7 +32,5 @@
     </div>
 
 </div>
-
-
 
 {% endblock %}

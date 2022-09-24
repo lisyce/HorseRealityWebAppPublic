@@ -1,6 +1,5 @@
 # TODO fix sticky footer covering up text when screen size shrinks (mobile)
 # TODO theory: go through building DetailedHorses by horse tab to reduce time. if you keep visiting horse pages in browser, it defaults to the most recent tab. this could save requests
-# TODO render something if the request on /horse-table fails instead of just displaying loading forever
 import os, json
 from dotenv import load_dotenv
 import horsereality
@@ -26,7 +25,7 @@ async def cache_user_horses(client, user_id):
 @app.route('/', methods=['GET', 'POST'])
 async def index():
     if request.method == 'GET':
-        return await render_template('index.html')
+        return await render_template('index.html', error="no error")
     elif request.method == 'POST':
         form = await request.form
         id = form['user_id']
@@ -48,7 +47,10 @@ async def about():
 @app.get('/horse-table/<int:id_>')
 async def horse_table_display(id_):
     global hr
-    username = await get_username_from_id(hr, id_)
+    try:
+        username = await get_username_from_id(hr, id_)
+    except:
+        return await render_template('index.html', error="Invalid player ID. Please try again.")
     return await render_template('horse_table.html', user_id=id_, username=username)
 
 @app.get('/api/horse-table/<int:id_>')

@@ -84,6 +84,9 @@ function populateTable(userID, username) {
   .fail(function(jqXHR, textStatus, errorThrown) {
     console.log("error " + textStatus);
     console.log("incoming Text " + jqXHR.responseText);
+
+    $("#loading").hide();
+    
   });
 }
 
