@@ -97,6 +97,8 @@ class DetailedHorse(Horse):
             value = right.string.strip().lower().replace(' ', '_')
             confo_stats[key] = value
             confo_totals[value] = confo_totals[value] + 1
+        
+
         data['confo_stats'] = confo_stats
         data['confo_totals'] = confo_totals
 

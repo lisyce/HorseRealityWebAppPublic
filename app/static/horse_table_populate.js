@@ -5,13 +5,16 @@ function populateTable(userID, username) {
     // set heading
     $("#username").text(username + "'s Horses").attr("id", "top");
 
-    // thead
-    topRow(data);
+    let icelandicHorseIndex = -1;
 
     // tbody
-    data.forEach(horse => {
+    const tbody = $("tbody");
+    const tdString = "<td></td>"
+
+    data.forEach((horse, index) => {
+      if (horse.breed == "icelandic_horse") icelandicHorseIndex = index;
+
       const row = $("<tr></tr>");
-      const tdString = "<td></td>"
 
       const externalLink = "https://www.horsereality.com/horses/" + horse.lifenumber + "/" + horse.name;
       linkObj = $("<a>" + horse.name + "</a>").attr("href", externalLink).attr("target", "_blank");
@@ -29,8 +32,20 @@ function populateTable(userID, username) {
       addStatsToRow(horse, row, "confo_stats", "confo");
       addStatsToRow(horse, row, "confo_totals", "confo-totals");
 
-      $("tbody").append(row);
+      tbody.append(row);
     });
+
+    // thead
+    topRow(data, icelandicHorseIndex);
+
+    // add extra td cells for non icelandic horses if one was present
+    if (icelandicHorseIndex >= 0) {
+      tbody.children().each((i, element) => {
+        if ($(element).children().filter(":nth-child(3)").text() != "icelandic horse") {
+          for (let i=0; i<2; i++) $(element).children().filter(":nth-child(27)").after($(tdString).addClass("confo"));
+        } 
+      });
+    }
 
     // apply jquery datatables
     $("#horse-data-table").addClass("display table table-striped table-hover");
@@ -72,15 +87,16 @@ function populateTable(userID, username) {
   });
 }
 
-function topRow(data) {
-  addKeysToTopRow(data, "gp_stats", "detailed-gp");
-  addKeysToTopRow(data, "discipline_gp", "discipline-gp");
-  addKeysToTopRow(data, "confo_stats", "confo");
-  addKeysToTopRow(data, "confo_totals", "confo-totals")
+function topRow(data, icelandicHorseIndex) {
+  addKeysToTopRow(data, "gp_stats", "detailed-gp", icelandicHorseIndex);
+  addKeysToTopRow(data, "discipline_gp", "discipline-gp", icelandicHorseIndex);
+  addKeysToTopRow(data, "confo_stats", "confo", icelandicHorseIndex);
+  addKeysToTopRow(data, "confo_totals", "confo-totals", icelandicHorseIndex)
 }
 
-function addKeysToTopRow(data, dict, className) {
-  Object.keys(data[0][dict]).forEach(k => {
+function addKeysToTopRow(data, dict, className, icelandicHorseIndex) {
+  let i = icelandicHorseIndex == -1 ? 0 : icelandicHorseIndex;
+  Object.keys(data[i][dict]).forEach(k => {
     $("<th>" + k.replaceAll("_", " ") + "</th>").addClass(className).appendTo("#top-row");
   });
 }

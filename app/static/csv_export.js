@@ -9,7 +9,7 @@ function exportTableToCSV(filename) {
     csv.push(['Name','#','Breed','Sex','Foal?','Total GP','Acceleration','Agility',
         'Balance','Bascule','Pulling Power','Speed','Sprint','Stamina','Strength','Surefootedness',
         'Dressage GP','Driving GP','Endurance GP','Eventing GP','Flat Racing GP','Show Jumping GP',
-        'Western Reining GP','Walk','Trot','Canter','Gallop','Posture','Head','Neck','Back','Shoulders',
+        'Western Reining GP','Walk','Trot','Canter','Gallop','Tölt', 'Flying Pace', 'Posture','Head','Neck','Back','Shoulders',
         'Frontlegs','Hindquarters','Socks','Confo Very Good','Confo Good','Confo Average','Confo Below Average',
         'Confo Poor'])
 

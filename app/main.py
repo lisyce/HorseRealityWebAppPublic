@@ -1,5 +1,6 @@
-# TODO fix sticky footer covering up text when screen size shrinks
-# TODO icelandic horse has more conformation (Tolt and flying pace)
+# TODO fix sticky footer covering up text when screen size shrinks (mobile)
+# TODO theory: go through building DetailedHorses by horse tab to reduce time. if you keep visiting horse pages in browser, it defaults to the most recent tab. this could save requests
+# TODO render something if the request on /horse-table fails instead of just displaying loading forever
 import os, json
 from dotenv import load_dotenv
 import horsereality
