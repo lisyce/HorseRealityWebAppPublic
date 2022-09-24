@@ -1,5 +1,5 @@
 function populateTable(userID, username) {
-  $.getJSON("/api/horse-table/"+userID, (data) => {
+  $.getJSON({url: "/api/horse-table/"+userID, timeout: 0}, (data) => {
     console.log(data);
     
     // set heading

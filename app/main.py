@@ -1,4 +1,5 @@
 # TODO fix sticky footer covering up text when screen size shrinks
+# TODO icelandic horse has more conformation (Tolt and flying pace)
 import os, json
 from dotenv import load_dotenv
 import horsereality
