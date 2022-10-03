@@ -1,6 +1,9 @@
 # TODO fix sticky footer covering up text when screen size shrinks (mobile)
 # TODO theory: go through building DetailedHorses by horse tab to reduce time. if you keep visiting horse pages in browser, it defaults to the most recent tab. this could save requests
-import os, json
+# TODO comment the code so it looks nice
+
+# TODO timeout fix idea: use api polling and a callback url: https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop/API/REST/Async/asyncApi-v1.3-requests-requestId-get.htm
+import os, json, asyncio
 from dotenv import load_dotenv
 import horsereality
 
@@ -17,10 +20,9 @@ app.config['CACHE_DIR'] = 'app/cache'
 cache = Cache()
 
 # TODO actually use the cache if the data already exists to save time
-async def cache_user_horses(client, user_id):
-    horses = await get_user_horses_json(client, user_id)
-    await cache.set(f'horse_list{str(user_id)}', horses)
-    return horses
+async def cache_user_horses(client, id_):
+    horses = await get_user_horses_json(client, id_)
+    await cache.set(f'horse_list_{str(id_)}', horses)
 
 @app.route('/', methods=['GET', 'POST'])
 async def index():
@@ -53,25 +55,32 @@ async def horse_table_display(id_):
         return await render_template('index.html', error="Invalid player ID. Please try again.")
     return await render_template('horse_table.html', user_id=id_, username=username)
 
+# polling link
 @app.get('/api/horse-table/<int:id_>')
 async def horse_table_api(id_):
-    global hr
-    async def send_events():
-        data = await cache_user_horses(hr, id_)
-        event = ServerSentEvent(json.dumps(data))
-        yield event.encode()
 
-    response = await make_response(
-        send_events(),
-        {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache',
-            'Transfer-Encoding': 'chunked',
-        },
-    )
-    response.timeout = None
+    horse_data_exists = await cache.exists(f'horse_list_{str(id_)}')
+    if not horse_data_exists:
+        print("not in cache")
+        # the data doesn't exist in the cache.
+        await cache.add(f'horse_list_{str(id_)}', None)
 
-    return response
+        global hr
+        loop = asyncio.get_running_loop();
+        loop.create_task(cache_user_horses(hr, id_))
+        return "", 202
+
+    # see if the data is None or not
+    cache_data = await cache.get(f'horse_list_{str(id_)}')
+    if cache_data is None:
+        print("scraping in progress")
+        return "", 202
+    else:
+        print("scraping done")
+        # the scraping has finished
+        await cache.delete(f'horse_list_{str(id_)}')
+        return json.dumps(cache_data)
+
 
 @app.before_serving
 async def startup():
