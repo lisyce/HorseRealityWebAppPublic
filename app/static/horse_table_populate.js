@@ -1,7 +1,7 @@
 async function populateTable(userID, username) {
 
   const data = await pollApi(userID);
-  // console.log(data);
+  console.log(data);
 
   // set heading
   $("#username").text(username + "'s Horses").attr("id", "top");
@@ -79,24 +79,22 @@ async function populateTable(userID, username) {
 
   //reveal completed table
   $("#loading").hide();
+  $(".text-danger").hide();
   $("#full-table").show();;
     
 }
 
-// continuously poll the id, returning the json data once a success is done
 async function wait(ms) {
   return new Promise (resolve => {
     setTimeout(resolve, ms);
   });
 }
 
+// continuously poll the id, returning the json data once a success is done
 async function pollApi(id) {
   while (true) {
-    await wait(2000);
-    console.log("*****")
+    await wait(5000);
     horseData = await getApiHorseTable(id);
-    console.log(horseData);
-    console.log(horseData != null);
     if (horseData != null) return horseData;
   }
 }
@@ -108,10 +106,10 @@ async function getApiHorseTable(id) {
     timeout: 0
   }).always((data, texStatus, errorThrown) => {
       if(data != "") {
-        horseData = JSON.parse(JSON.stringify(data))
+        horseData = data
       }
   });
-  return horseData;
+  return JSON.parse(horseData);
 }
 
 function topRow(data, icelandicHorseIndex) {

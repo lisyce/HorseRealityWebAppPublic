@@ -1,8 +1,8 @@
 # TODO fix sticky footer covering up text when screen size shrinks (mobile)
 # TODO theory: go through building DetailedHorses by horse tab to reduce time. if you keep visiting horse pages in browser, it defaults to the most recent tab. this could save requests
 # TODO comment the code so it looks nice
+# TODO show progress bar when loading
 
-# TODO timeout fix idea: use api polling and a callback url: https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop/API/REST/Async/asyncApi-v1.3-requests-requestId-get.htm
 import os, json, asyncio
 from dotenv import load_dotenv
 import horsereality
@@ -19,7 +19,7 @@ app.config['CACHE_TYPE'] = 'FileSystemCache'
 app.config['CACHE_DIR'] = 'app/cache'
 cache = Cache()
 
-# TODO actually use the cache if the data already exists to save time
+# TODO actually use the cache if the data already exists to save time (needs a hard refresh button during session)
 async def cache_user_horses(client, id_):
     horses = await get_user_horses_json(client, id_)
     await cache.set(f'horse_list_{str(id_)}', horses)
@@ -61,7 +61,6 @@ async def horse_table_api(id_):
 
     horse_data_exists = await cache.exists(f'horse_list_{str(id_)}')
     if not horse_data_exists:
-        print("not in cache")
         # the data doesn't exist in the cache.
         await cache.add(f'horse_list_{str(id_)}', None)
 
@@ -73,10 +72,8 @@ async def horse_table_api(id_):
     # see if the data is None or not
     cache_data = await cache.get(f'horse_list_{str(id_)}')
     if cache_data is None:
-        print("scraping in progress")
         return "", 202
     else:
-        print("scraping done")
         # the scraping has finished
         await cache.delete(f'horse_list_{str(id_)}')
         return json.dumps(cache_data)
